@@ -41,6 +41,9 @@ export const useTasksStore = defineStore('tasksStore', () => {
     }
     const addTask = (task) => {
         loader.value = true
+        const today = new Date();
+        const date = String(today.getDate()).padStart(2, '0') + '.' + String(today.getMonth() + 1).padStart(2, '0') + '.' + today.getFullYear();
+        task = {...task, createDate: date}
         update(dbRef(db, 'users/' + auth.currentUser.uid + '/tasks'), {
             todo: [...tasks.value.todo, task]
         }).then(() => console.log('Добавлено')).catch((error) => console.log(error));
@@ -52,11 +55,23 @@ export const useTasksStore = defineStore('tasksStore', () => {
             inProgress: tasks.inProgress
         }).then(() => console.log('Добавлено')).catch((error) => console.log(error));
     }
-    const removeTask = (index) => {
+    const removeTask = (index, column) => {
+        if (column === 'todo') {
+            tasks.value.todo.splice(index, 1)
+            update(dbRef(db, 'users/' + auth.currentUser.uid + '/tasks'), {
+                todo: tasks.value.todo
+            }).then(() => console.log('Добавлено')).catch((error) => console.log(error));
+        } else if (column === 'inProgress') {
+            tasks.value.inProgress.splice(index, 1)
+            update(dbRef(db, 'users/' + auth.currentUser.uid + '/tasks'), {
+                inProgress: tasks.value.inProgress
+            }).then(() => console.log('Добавлено')).catch((error) => console.log(error));
+        } else if (column === 'done') {
         tasks.value.done.splice(index, 1)
         update(dbRef(db, 'users/' + auth.currentUser.uid + '/tasks'), {
             done: tasks.value.done
         }).then(() => console.log('Добавлено')).catch((error) => console.log(error));
+        }
     }
     return {tasks, getTasks, addTask, removeTask, loader, setTasks}
 })

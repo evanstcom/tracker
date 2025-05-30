@@ -43,5 +43,5 @@ onMounted(() => {
   <main>
     <RouterView/>
   </main>
-  <Footer v-show="token"/>
+<!--  <Footer v-show="token"/>-->
 </template>

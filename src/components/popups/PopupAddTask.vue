@@ -43,15 +43,15 @@
                 <div class="bg-gray-900 px-4 pb-2 pt-2">
                   <label for="name" class=" text-sm/6 font-medium">Название</label>
                   <div class="mt-2">
-                    <input v-model="task.name" type="text" id="taskName" :autocomplete=false required
+                    <input v-model.trim="task.name" type="text" id="taskName" :autocomplete=false required
                            class="block w-full rounded-md bg-gray-800 px-3 py-1.5 text-base outline-none -outline-offset-1 placeholder:text-gray-400 sm:text-sm/6"/>
                   </div>
                 </div>
                 <div class="bg-gray-900 px-4 pb-4">
                   <label for="name" class=" text-sm/6 font-medium">Описание задачи</label>
                   <div class="mt-2">
-                    <input v-model="task.description" type="text" id="taskName" :autocomplete=false required
-                           class="block w-full rounded-md bg-gray-800 px-3 py-1.5 text-base outline-none -outline-offset-1 placeholder:text-gray-400 sm:text-sm/6"/>
+                    <textarea v-model.trim="task.description" type="text" id="taskName" :autocomplete=false required
+                           class="block p-1 text-xs w-full rounded-md bg-gray-800 px-3 py-1.5 outline-none -outline-offset-1 placeholder:text-gray-400 sm:text-sm/6 resize-none max-h-96 overflow-hidden overflow-y-scroll"/>
                   </div>
                 </div>
                 <div class="flex gap-4 px-4">
@@ -65,7 +65,7 @@
                     <DatePickerRoot
                         id="startDate"
                         locale="ru"
-                        v-model="task.date"
+                        v-model="task.deadline"
                     >
                       <DatePickerField
                           v-slot="{ segments }"
@@ -184,9 +184,9 @@
                         class="relative"
                         v-model="task.priority"
                     >
-                      <ComboboxAnchor class="min-w-[160px] h-9 inline-flex items-center justify-between rounded-lg px-[15px] text-xs leading-none  gap-[5px] bg-gray-800 text-grass11 shadow-sm focus:shadow-[0_0_0_2px] focus:shadow-black data-[placeholder]:text-grass9 outline-none">
+                      <ComboboxAnchor class="w-full h-9 inline-flex items-center justify-between rounded-lg px-[15px] text-xs leading-none  gap-[5px] bg-gray-800 text-grass11 shadow-sm focus:shadow-[0_0_0_2px] focus:shadow-black data-[placeholder]:text-grass9 outline-none">
                         <ComboboxInput
-                            class="!bg-transparent outline-none selection:bg-grass5 placeholder-stone-400"
+                            class="!bg-transparent outline-none selection:bg-grass5 placeholder-stone-400 w-full"
                             placeholder="Выберите приоритет"
                         />
                         <ComboboxTrigger>
@@ -197,8 +197,8 @@
                         </ComboboxTrigger>
                       </ComboboxAnchor>
 
-                      <ComboboxContent class="absolute z-20 min-w-[160px] mt-1 bg-gray-800 rounded-lg shadow-sm will-change-[opacity,transform] data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade">
-                        <ComboboxViewport class="p-[5px]">
+                      <ComboboxContent class="absolute z-20 min-w-20 mt-1 bg-gray-800 rounded-lg shadow-sm will-change-[opacity,transform] data-[side=top]:animate-slideDownAndFade data-[side=right]:animate-slideLeftAndFade data-[side=bottom]:animate-slideUpAndFade data-[side=left]:animate-slideRightAndFade">
+                        <ComboboxViewport class="p-2">
                           <ComboboxEmpty class="text-xs font-medium text-center py-2" />
 
                           <template
@@ -269,7 +269,7 @@ import {
   DialogTitle,
 } from '@headlessui/vue'
 import {useAuthStore} from "@/stores/auth.js";
-import {onMounted, ref} from "vue";
+import {ref} from "vue";
 import Loading from "@/components/ui/Loading.vue";
 import {ExclamationTriangleIcon} from "@heroicons/vue/24/outline/index.js";
 import { Icon } from '@iconify/vue'
@@ -311,7 +311,7 @@ const options = [
 const task = ref({
   name: '',
   description: '',
-  date: '',
+  deadline: '',
   priority: 'Средний',
   list: 'todo'
 })
@@ -333,7 +333,7 @@ const {openPopup, handleClick} = defineProps({
 })
 
 const createTask = () => {
-  if (!task.value.name || !task.value.description || !task.value.date) {
+  if (!task.value.name || !task.value.description || !task.value.deadline) {
     return error.value = 'Заполните все поля'
   } else {
     error.value = ''
