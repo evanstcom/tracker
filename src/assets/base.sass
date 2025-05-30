@@ -1,0 +1,33 @@
+@tailwind base
+@tailwind components
+@tailwind utilities
+
+@font-face
+  font-family: 'Montserrat'
+  src: url('fonts/Montserrat-Regular.ttf')
+
+*
+  padding: 0
+  margin: 0
+  box-sizing: border-box
+  font-family: 'Montserrat', sans-serif
+  scroll-behavior: smooth
+
+
+html
+  background: #000
+
+::-webkit-scrollbar
+  display: none
+
+
+body
+  background-color: #000
+  color: #fff
+
+  input:-webkit-autofill, input:-webkit-autofill:focus
+    transition: background-color 0s 600000s, color 0s 600000s !important
+
+input[type=text]::placeholder
+  color: rgb(74, 84, 98)
+
